@@ -109,3 +109,16 @@
 .email .star-checkbox:checked::before {
   background-image: url(https://www.gstatic.com/images/icons/material/system/2x/star_googyellow500_20dp.png);
 }
+
+.email-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.email-item.unread {
+  font-weight: bold;
+}
+
+.email-item.read {
+  color: gray;
+}
