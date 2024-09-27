@@ -8,20 +8,22 @@ function App() {
   const [emails, setEmails] = useState(initialEmails);
 
   // Toggle starred state
-  const toggleStarred = (id) => {
+  function toggleStarred(id) {
     const updatedEmails = emails.map((email) =>
       email.id === id ? { ...email, starred: !email.starred } : email
     );
     setEmails(updatedEmails);
-  };
+
+  }
+  
 
   // Toggle read state
-  const toggleRead = (id) => {
+  function toggleRead(id) {
     const updatedEmails = emails.map((email) =>
       email.id === id ? { ...email, read: !email.read } : email
     );
     setEmails(updatedEmails);
-  };
+  }
 
   // Calculate unread and starred counts
   const unreadCount = emails.filter((email) => !email.read).length;
