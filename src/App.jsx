@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import Header from './components/Header';
-import initialEmails from './data/emails';  // Importing email data
+import initialEmails from './data/emails';  
 
 import './styles/App.css';
 
 function App() {
   const [emails, setEmails] = useState(initialEmails);
   const [hideRead, setHideread] = useState(false);
+  const [currentTab, setCurrentTab] = useState('inbox');
 
-  // Toggle starred state
   function toggleStarred(id) {
     const updatedEmails = emails.map((email) =>
       email.id === id ? { ...email, starred: !email.starred } : email
@@ -18,7 +18,6 @@ function App() {
   }
   
 
-  // Toggle read state
   function toggleRead(id) {
     const updatedEmails = emails.map((email) =>
       email.id === id ? { ...email, read: !email.read } : email
@@ -37,23 +36,41 @@ function App() {
     return emails;
   }
 
-  // Calculate unread and starred counts
+  function getStarredEmails(emails){
+    return emails.filter(email => email.starred);
+  }
+
   const unreadCount = emails.filter((email) => !email.read).length;
   const starredCount = emails.filter((email) => email.starred).length;
-  const displayedEmails = getReadEmails(emails);
+ 
+  let displayedEmails;
+  if (currentTab === 'starred') {
+    displayedEmails = getStarredEmails(emails);
+  }else {
+    displayedEmails = getReadEmails(emails);
+  }
+
+
+
 
   return (
     <div className="app">
       <Header />
       <nav className="left-menu">
         <ul className="inbox-list">
-          <li className="item active">
+        <li
+            className={`item ${currentTab === 'inbox' ? 'active' : ''}`}  
+            onClick={() => setCurrentTab('inbox')}  
+          >
             <span className="label">Inbox</span>
-            <span className="count">{unreadCount}</span>
+            <span className="count">{unreadCount}</span>  
           </li>
-          <li className="item">
-            <span className="label">Starred</span>
-            <span className="count">{starredCount}</span>
+          <li
+            className={`item ${currentTab === 'starred' ? 'active' : ''}`}  
+            onClick={() => setCurrentTab('starred')}  
+          >
+             <span className="label">Starred</span>
+            <span className="count">{starredCount}</span>  
           </li>
           <li className="item toggle">
             <label htmlFor="hide-read">Hide read</label>
@@ -71,7 +88,7 @@ function App() {
                   className="select-checkbox"
                   type="checkbox"
                   checked={email.read}
-                  onChange={() => toggleRead(email.id)} // Toggle read/unread status
+                  onChange={() => toggleRead(email.id)} 
                 />
               </div>
               <div className="star">
@@ -79,7 +96,7 @@ function App() {
                   className="star-checkbox"
                   type="checkbox"
                   checked={email.starred}
-                  onChange={() => toggleStarred(email.id)} // Toggle starred status
+                  onChange={() => toggleStarred(email.id)} 
                 />
               </div>
               <div className="sender">{email.sender}</div>
