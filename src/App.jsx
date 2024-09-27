@@ -6,6 +6,7 @@ import './styles/App.css';
 
 function App() {
   const [emails, setEmails] = useState(initialEmails);
+  const [hideRead, setHideread] = useState(false);
 
   // Toggle starred state
   function toggleStarred(id) {
@@ -25,9 +26,21 @@ function App() {
     setEmails(updatedEmails);
   }
 
+  function toggleHideRead() {
+    setHideread(!hideRead);
+  }
+
+  function getReadEmails(emails) {
+    if(hideRead) {
+      return emails.filter(email => !email.read);
+    }
+    return emails;
+  }
+
   // Calculate unread and starred counts
   const unreadCount = emails.filter((email) => !email.read).length;
   const starredCount = emails.filter((email) => email.starred).length;
+  const displayedEmails = getReadEmails(emails);
 
   return (
     <div className="app">
@@ -44,14 +57,14 @@ function App() {
           </li>
           <li className="item toggle">
             <label htmlFor="hide-read">Hide read</label>
-            <input id="hide-read" type="checkbox" />
+            <input id="hide-read" type="checkbox" checked={hideRead} onChange={toggleHideRead} />
           </li>
         </ul>
       </nav>
 
       <main className="emails">
         <ul>
-          {emails.map((email) => (
+          {displayedEmails.map((email) => (
             <li key={email.id} className={`email ${email.read ? 'read' : 'unread'}`}>
               <div className="select">
                 <input
@@ -70,7 +83,7 @@ function App() {
                 />
               </div>
               <div className="sender">{email.sender}</div>
-              <div className="title">{email.title}</div> {/* Display email title */}
+              <div className="title">{email.title}</div> 
             </li>
           ))}
         </ul>
